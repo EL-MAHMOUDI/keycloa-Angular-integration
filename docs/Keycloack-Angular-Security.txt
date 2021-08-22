@@ -1,0 +1,43 @@
+1- Add keycloak-js dependency to the project: $npm i --save keycloak-js
+2- Puisqu'il s'agit d'une librairie javascript externe mais pas un module angular, il faut la declarer dans le tableau scripts declaré dans le fichier angular.json:
+	    "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+            "scripts": [
+              "node_modules/keycloak-js/dist/keycloak.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
+Note: anytime you make achange to the angular.json file, you should restart the server ($ng serve)
+3- Create the authentication service: $ng g s services/keycloack-security. This will generate a KeycloakSecurityService class file alongside with a test file.
+4- Add a method with name init() to the KeycloakSecurityService class. For now let's ignore what the body of the method should be, and let's populate it with a console.log('Security initialization')
+5- This part is a little bit tricky. We need to run the init() method on start up (Make the analogy with a Spring Boot CommandLineRunner bean). For that, open the AppModule class file, inside the providers Array add an object as follows:
+	  providers: [
+	    {
+	      provide:APP_INITIALIZER, 
+	      deps:[KeycloakSecurityService], 
+	      useFactory:kcFactory,
+	      multi:true
+	    }
+	  ],
+6- Now what about that kcFactory which is given as a value to the useFactoty field ? This is a function that we have to define. Let's declare it in the same file as the AppModule class:
+	export function kcFactory(kcSecurityService:KeycloakSecurityService){
+	  return ()=> kcSecurityService.init();
+	}
+	@NgModule({
+	  declarations: [
+	    AppComponent,
+	    ProductsComponent,
+	  .....
+Once the application starts up, a bean of type KeycloakSecurityService will be injected in this fuction, then the function will be executed. Hence, the KeycloakSecurityService#init() method will be triggred.
+7- Now let's populate the KeycloakSecurityService.
+8- Add Routing Guards: 
+	- AuthGuard for normal authenticated users: $ng g g services/auth 
+	- AdminGuard for an Admin uses: $ng g g services/admin 
+
+
+
+
+
+

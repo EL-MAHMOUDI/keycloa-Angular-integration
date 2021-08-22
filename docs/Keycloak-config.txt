@@ -1,0 +1,18 @@
+1- Start Keycloack with docker:
+We will start an instance of Keycloak locally on port 8080. By default there is no admin user created so you won't be able to login to the admin console. To create an admin account you need to use environment variables to pass in an initial username and password. 
+The whole thing is done by running:
+$docker run -p 8080:8080 -e KEYCLOAK_USER=<USERNAME> -e KEYCLOAK_PASSWORD=<PASSWORD> jboss/keycloak
+In my Keycloack instance the username is admin the passowrd is admin. So the command is in my case:
+$docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin jboss/keycloak
+This image supports using H2, MySQL, PostgreSQL, MariaDB, Oracle or Microsoft SQL Server as the database. You can specify the DB vendor directly with the DB_VENDOR environment variable. If the DB can't be detected it will default to the embedded H2 database.
+2- Open your broweser and visit: http://localhost:8080. Click on admin console, a login page will show up: username=admin, password=admin.
+3- Add a realm with name ecom-realm.
+4- Add some roles
+5- Add some users and give them the appropriate roles:
+	{username: amine, password: password}
+	{username: aicha, password: password}
+Note: when you create a user you should give him a password.
+6- Add some clients:
+	* Angular app: {clientId = AngularProductsApp,url = http://localhost:4200, public client}
+	* REST API: {clientId = ProductsMicroservice, bearer only}
+

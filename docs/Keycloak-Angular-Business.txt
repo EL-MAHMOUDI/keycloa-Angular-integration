@@ -1,0 +1,130 @@
+1- Create an angular Project: $ng new Keycloak-Angular
+2- Open in VS code. In the terminal run $ng serve
+3- Install dependencies: $npm i bootstrap@4 jquery --save
+4- Add Bootstrap and Jquery to the angular.json file:
+          "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+          "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+Note: the bootsrap.bundle.min.js includes both bootstrap.min.js and popper.min.js (popper is necessary for any popping feature such as Dropdown menu)
+
+5- Search for a Bootstrap 4 Navbar on Google (the W3Schools example) and copu it. Open the app.component.html and paste the content in there, then add a router-outlet element after the nav element.
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  		<!-- Brand -->
+  		<a class="navbar-brand" href="#">Logo</a>
+  		<!-- Links -->
+  		<ul class="navbar-nav">
+    			<li class="nav-item">
+      				<a class="nav-link" href="#">Products</a>
+    			</li>
+    			<li class="nav-item">
+      				<a class="nav-link" href="#">Suppliers</a>
+    			</li>
+    		<!-- Dropdown -->
+    			<li class="nav-item dropdown">
+      				<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        			Dropdown link
+      				</a>
+      				<div class="dropdown-menu">
+        				<a class="dropdown-item" href="#">Link 1</a>
+        				<a class="dropdown-item" href="#">Link 2</a>
+        				<a class="dropdown-item" href="#">Link 3</a>
+      				</div>
+    			</li>
+  		</ul>
+	</nav>
+	<router-outlet></router-outlet>
+6- Close the links with an </ul> just on line above the Dropdown comment and open another <ul> just on line under the Dropdown command. Change the Dropdown list to make it look like the following:
+		<!-- Dropdown -->
+		<ul class="navbar-nav ml-auto"> 
+    			<li class="nav-item dropdown">
+      				<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        			Dropdown link
+      				</a>
+      				<div class="dropdown-menu">
+        				<a class="dropdown-item" href="#">Logout</a>
+        				<a class="dropdown-item" href="#">Change Password</a>
+      				</div>
+    			</li>
+	 	</ul>
+7- Now in the nav section, we define some links with the special angular attribute "routerLink":
+	change <a class="nav-link" href="#">Link 1</a> with <a class="nav-link" routerLink="/products">Products</a>
+	change <a class="nav-link" href="#">Link 2</a> with <a class="nav-link" routeLink="/suppliers">Suppliers</a>
+8- Create two components:
+	$ng g c products
+	$ng g c suppliers
+9- Add Routes: in the Routes Array inside the app-routing.module.ts make the following changes
+	const routes: Routes = [
+  		{path:'products', component:ProductsComponent},
+  		{path:'suppliers', component:SuppliersComponent}
+	];
+10- Open the products.component.ts file and add a field with the name products and of type any. In the ngOnInit method body, initialize the products field with an array of hard coded objects:
+	export class ProductsComponent implements OnInit {
+		products: any;
+		constructor() { }
+  		ngOnInit(): void {
+    			this.products = [
+      				{id:1, name:'Computer HP 54', price:7800},
+      				{id:2, name:'Printer LX ER', price:1200},
+      				{id:3, name:'Sart Phone Samsung S20', price:12000}
+    			] 
+  		}
+	}
+11- In the products.component.html file add the following code:
+	<div class="container">
+    		<h2>Products</h2>
+    		<p></p>
+    		<table class="table">
+        		<thead>
+            			<tr>
+                			<th>ID</th>
+                			<th>Name</th>
+               	 			<th>Price</th>
+            			</tr>
+        		</thead>
+        		<tbody>
+            			<tr *ngFor="let p of products">
+                			<td>{{p.id}}</td>
+                			<td>{{p.name}}</td>
+                			<td>{{p.price}}</td>
+            			</tr>
+        		</tbody>
+    		</table>
+	</div>
+12- Open the suppliers.component.ts file and add a field with the name products and of type any. In the ngOnInit method body, initialize the products field with an array of hard coded objects:
+	export class SuppliersComponent implements OnInit {
+	  suppliers: any;
+	  constructor() { }
+	  ngOnInit(): void {
+	    this.suppliers = [
+	      {id:1, name:'HP', email:'supplier@hp.com'},
+	      {id:2, name:'EPSON',email:'supplier@epson.com' },
+	      {id:3, name:'SAMSUNG', email:'supplier@samsung.com'}
+	    ] 
+	  }
+	}
+13- In the products.component.html file add the following code:
+	<div class="container">
+	    <h2>Suppliers</h2>
+	    <p></p>
+	    <table class="table table-dark">
+		<thead>
+		    <tr>
+		        <th>ID</th>
+		        <th>Name</th>
+		        <th>Email</th>
+		    </tr>
+		</thead>
+		<tbody>
+		    <tr *ngFor='let s of suppliers'>
+		        <td>s.id</td>
+		        <td>s.name</td>
+		        <td>s.email</td>
+		    </tr>
+		</tbody>
+	    </table>
+	</div>
+

@@ -1,0 +1,8 @@
+https://bootstrapious.com/p/bootstrap-carousel
+- Create a new angular component
+- Open the link below. In this article search for the demo. Open the link. Download the page ressources.
+- Copy the content located inside the <body>..</body> of the fullscreen.css resource file, and paste it in the Coponent HTML file
+- Copy the content of the custom.css resource file and paste it in the Components css file
+- Create an image directry in your Angular Project: assets/img
+- Populate it with some images
+- Back to your coponent HTML file, set the images URL

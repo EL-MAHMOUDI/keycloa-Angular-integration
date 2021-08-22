@@ -1,0 +1,68 @@
+1- Create an angular Project: $ng new Keycloak-Angular
+Error:  npm ERR! code ERESOLVE
+	npm ERR! ERESOLVE unable to resolve dependency tree
+	npm ERR! 
+	npm ERR! While resolving: kaycloack-angular@0.0.0
+	npm ERR! Found: jasmine-core@3.6.0
+	npm ERR! node_modules/jasmine-core
+	npm ERR!   dev jasmine-core@"~3.6.0" from the root project
+	npm ERR! 
+	npm ERR! Could not resolve dependency:
+	npm ERR! peer jasmine-core@">=3.7.1" from karma-jasmine-html-reporter@1.6.0
+	npm ERR! node_modules/karma-jasmine-html-reporter
+	npm ERR!   dev karma-jasmine-html-reporter@"^1.5.0" from the root project
+	npm ERR! 
+	npm ERR! Fix the upstream dependency conflict, or retry
+	npm ERR! this command with --force, or --legacy-peer-deps
+	npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
+Fix: Unistall and install the latest version of angular. Upgrade Node.js ( I was using v10, but the latest version of Angular expects Node version 12 or higher)
+
+2- Navbar drop-down menu not working with Angular and Bootstrap 4: 
+You have to make sure that popper.js is included and loaded in your Angular app because that is required for all things that pop up or drop down in Bootstrap 4. Here's what the relevant part of your angular-cli.json should look like:
+	"styles": [
+		"../node_modules/bootstrap/dist/css/bootstrap.min.css",
+		"styles.css"
+	],
+	"scripts": [
+		"../node_modules/jquery/dist/jquery.min.js",
+		"../node_modules/popper.js/dist/umd/popper.min.js",
+		"../node_modules/bootstrap/dist/js/bootstrap.min.js"
+	],
+To install popper.js use this command: $npm install popper.js --save
+
+3- Issue on getting the name from the JWT:
+The KeycloakInstance#tokenParsed returns an object of type KeycloakTokenParsed. This object holds all the claims but don't implement access to the name. So, when you try to access the name with KeycloakInstance.parsedToken.name, the code doesn't compile.
+Work around: Inside the SecurityService class
+	- I have added a field with type any: 
+			public tokenParsed:any;
+	  this field will hold all the claims of the JWT token.
+	- I instanciate this field in the init method, just after instantiating the KeycloakInstance:
+		public async init(){
+		    await this.kc?.init({
+		      //onLoad:'login-required',
+		      onLoad:'check-sso'
+		    });
+		    this.tokenParsed = this.kc.tokenParsed;
+		}
+	- I defined a method that returns the name:
+		public getUsername(){
+		    return this.tokenParsed?.name;
+		}
+4- How to redirect inside a router guard CanActivate method in Angular (≥v7.1.0) ?
+	- Inject the router to your guard class
+	- Depends on your condition evaluation, your CanActivate method may return either a boolean or a UrlTree. So your logic may look like this example:
+	  if(isAuth){
+        	return true;
+      	  }
+      	  return this.router.createUrlTree(['/login']);
+
+
+
+
+
+
+
+
+
+
+	-
